@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "strategy-sdk"
+version = "0.5.2"
+description = "Portable Python strategy contracts for historical and live trading hosts."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+timezones = ["tzdata"]
+dev = ["ruff==0.15.20"]
+
+[tool.hatch.build]
+exclude = [
+    "/src/strategy_sdk/catalog/*",
+    "!/src/strategy_sdk/catalog/__init__.py",
+    "!/src/strategy_sdk/catalog/empty.py",
+    "/.private-originals/",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/strategy_sdk"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/src/strategy_sdk", "/pyproject.toml", "/README.md", "/LICENSE"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

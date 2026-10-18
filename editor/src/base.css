@@ -1,0 +1,99 @@
+:root {
+  /* Palette: pigments and neutral materials from the Grimdark Instrument manifesto. */
+  --palette-darkness: #21242c;
+  --palette-iron: #333438;
+  --palette-shadow: #3f403b;
+  --palette-ivory: #f6e3be;
+  --palette-moonbeam: #f0b71d;
+  --palette-blood: #9e1e3e;
+  --palette-vermilion: #b01c13;
+  --palette-dewpath: #4d8385;
+  --palette-gladeshard: #93b931;
+  --palette-metal: #3a4b53;
+  --palette-olive: #3e3f2a;
+  --palette-hearth: #eabb8b;
+
+  /* Semantic tokens: shared by CSS, Blockly and the canvas renderer. */
+  --bg-canvas: var(--palette-darkness);
+  --bg-panel: #26292f;
+  --bg-surface: #2c2e33;
+  --bg-raised: var(--palette-iron);
+  --bg-sunken: #1c1f25;
+  --bg-panel-cold: #252a2f;
+  --bg-panel-warm: #282925;
+  --text-primary: var(--palette-ivory);
+  --text-secondary: #b8ad98;
+  --text-tertiary: #a59c8b;
+  --text-disabled: #777367;
+  --border-subtle: #343731;
+  --border-normal: var(--palette-shadow);
+  --accent: var(--palette-moonbeam);
+  --accent-muted: rgb(240 183 29 / 0.12);
+  --accent-hover: #f9de33;
+  --success: var(--palette-gladeshard);
+  --info: var(--palette-dewpath);
+  --danger: var(--palette-blood);
+  --critical: var(--palette-vermilion);
+  --font-ui: "Segoe UI", system-ui, sans-serif;
+  --font-mono: Consolas, "Liberation Mono", monospace;
+
+  /* Component tokens: controls, status indicators and editor groups. */
+  --button-primary-bg: var(--accent);
+  --input-border-focus: var(--accent);
+  --status-ready: var(--success);
+  --status-processing: var(--info);
+  --status-error: var(--danger);
+  --block-root: var(--bg-raised);
+  --block-schedule: var(--palette-metal);
+  --block-signal: #3c4440;
+  --block-restrictions: var(--palette-olive);
+  --block-sizing: #443c35;
+  --block-other: var(--palette-shadow);
+  --canvas-grid: #343941;
+  --radius-control: 4px;
+  --radius-card: 6px;
+  --radius-modal: 8px;
+  color-scheme: dark;
+  font-family: var(--font-ui);
+  font-synthesis: none;
+  color: var(--text-primary);
+  background: var(--bg-canvas);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; }
+[hidden] { display: none !important; }
+button, input, select { font: inherit; }
+button {
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  transition: background-color 140ms, color 140ms, border-color 140ms;
+}
+button:hover { background: var(--bg-raised); color: var(--text-primary); }
+button:disabled { color: var(--text-disabled); cursor: default; }
+button:disabled:hover { background: var(--bg-surface); }
+button.primary { background: var(--button-primary-bg); color: var(--bg-sunken); }
+button.primary:hover { background: var(--accent-hover); }
+button.primary:disabled { background: var(--bg-raised); color: var(--text-disabled); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { color: var(--text-primary); background: #645321; }
+header {
+  min-height: 80px;
+  padding: 16px 22px;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-panel);
+}
+.brand { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 600; letter-spacing: -0.3px; white-space: nowrap; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--radius-control); background: var(--bg-raised); color: var(--text-primary); font: 600 19px var(--font-mono); }
+.brand small { display: block; margin-top: 4px; font-size: 12px; font-weight: 400; color: var(--text-tertiary); letter-spacing: 0.02em; }
+.actions { display: flex; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { button { transition: none; } }

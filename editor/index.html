@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strategy SDK · Редактор стратегий</title>
+    <meta name="theme-color" content="#21242c" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23333438'/%3E%3Ctext x='9' y='23' font-family='monospace' font-size='23' fill='%23f6e3be'%3ES%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header>
+      <div class="brand"><span class="brand-mark">S</span><div>Strategy SDK<small>Редактор стратегий</small></div></div>
+      <div class="actions" id="visual-actions">
+        <button id="import">Открыть JSON</button><input id="file" type="file" accept=".json,application/json" hidden />
+        <button id="save" disabled title="Скачать проект для дальнейшего редактирования">Скачать JSON</button>
+        <button id="download" disabled>Скачать Python</button>
+        <button id="publish" class="primary" disabled>Создать в каталоге</button>
+      </div>
+    </header>
+    <nav class="editor-kind" aria-label="Способ редактирования">
+      <button id="visual-mode" aria-pressed="true">Параметры: блоки и узлы</button>
+      <button id="python-mode" aria-pressed="false">Python: полный алгоритм</button>
+    </nav>
+    <section id="python-workbench" hidden aria-label="Редактор полного алгоритма">
+      <div class="python-toolbar">
+        <button id="python-new">Новая стратегия</button>
+        <label>Файл из SDK<select id="python-catalog"></select></label>
+        <button id="python-open">Открыть код</button>
+        <button id="python-import">Открыть .py</button><input id="python-file" type="file" accept=".py" hidden />
+        <button id="python-export">Скачать Python</button>
+      </div>
+      <p id="python-status" role="status" aria-live="polite"></p>
+      <div class="python-layout">
+        <div class="python-code-pane">
+          <label>Имя файла<input id="python-filename" spellcheck="false" value="new_strategy.py" /></label>
+          <label for="python-code">Полный код стратегии</label>
+          <textarea id="python-code" spellcheck="false" autocapitalize="off" aria-describedby="python-help"></textarea>
+        </div>
+        <aside class="python-controls">
+          <h2>Контракт стратегии</h2>
+          <p id="python-help">Редактируйте любые правила входа, выхода, размера позиции и состояния. Блоки показывают параметры готовых алгоритмов; произвольный Python остаётся в текстовом режиме.</p>
+          <label>Параметры для проверки, JSON<textarea id="python-params" spellcheck="false">{}</textarea></label>
+          <button id="python-check">Проверить контракт</button>
+          <button id="python-save" class="primary">Сохранить в каталоге</button>
+          <p class="field-help">Сохранение обновляет общий Python-файл. Предыдущая версия сохраняется в .history. Проверка выполняет доверенный код локально, без подключения к счёту.</p>
+          <pre id="python-contract"></pre>
+        </aside>
+      </div>
+    </section>
+    <main id="visual-workbench">
+      <section class="settings" aria-label="Настройки стратегии">
+        <div class="eyebrow">01 / СТРАТЕГИЯ</div>
+        <label>Базовый алгоритм<select id="template"></select></label>
+        <p class="field-help">Выбор другого алгоритма создаёт новый вариант с настройками по умолчанию.</p>
+        <label>Имя варианта<input id="name" value="my_cny_sma" maxlength="80" spellcheck="false" aria-describedby="name-help" /></label>
+        <p id="name-help" class="field-help">Имя Python-файла: латинские буквы, цифры и подчёркивание.</p>
+        <label>Версия правил<input id="version" value="1" maxlength="40" spellcheck="false" /></label>
+        <div class="storage-card" role="status">
+          <strong>Сохранение проекта</strong>
+          <p id="draft-state">Черновик ещё не сохранён.</p>
+          <p id="publication-state">В каталоге не создан.</p>
+        </div>
+        <details class="data-details" open>
+          <summary>Требования к данным</summary>
+          <dl id="requirements"><dt>Проверка</dt><dd>Загрузка…</dd></dl>
+          <p id="requirements-help" class="field-help"></p>
+        </details>
+      </section>
+      <section class="workspace">
+        <div class="workspace-toolbar">
+          <div class="tabs" role="tablist" aria-label="Режим редактора">
+            <button id="blocks-tab" role="tab" aria-selected="true" aria-controls="canvas-panel">Блоки <span>Blockly</span></button>
+            <button id="graph-tab" role="tab" aria-selected="false" aria-controls="canvas-panel" tabindex="-1">Узлы <span>LiteGraph</span></button>
+          </div>
+          <div class="view-actions">
+            <button id="restore" class="quiet" title="Восстановить схему по последним проверенным параметрам">Восстановить схему</button>
+            <button id="arrange" class="quiet">Показать всё</button>
+          </div>
+        </div>
+        <p class="workspace-hint">Выберите раздел на схеме. Крупные поля находятся в панели «Параметры».</p>
+        <div class="canvas-area" role="tabpanel" aria-labelledby="blocks-tab" id="canvas-panel">
+          <div id="blockly"></div>
+          <div id="litegraph" hidden><canvas id="graph-canvas" tabindex="0" aria-label="Граф стратегии"></canvas></div>
+        </div>
+        <footer><span id="status" role="status" aria-live="polite">Загрузка каталога…</span></footer>
+      </section>
+      <aside class="inspector" aria-label="Свойства стратегии">
+        <div class="tabs inspector-tabs" role="tablist" aria-label="Содержимое панели">
+          <button id="properties-tab" role="tab" aria-selected="true" aria-controls="properties-panel">Параметры</button>
+          <button id="source-tab" role="tab" aria-selected="false" aria-controls="source-panel" tabindex="-1">Python</button>
+        </div>
+        <div id="properties-panel" class="inspector-content" role="tabpanel" aria-labelledby="properties-tab">
+          <label>Раздел настроек<select id="property-group"></select></label>
+          <h2 id="property-title">Параметры стратегии</h2>
+          <p class="field-help">Изменения применяются сразу и проверяются SDK.</p>
+          <form id="property-fields" novalidate></form>
+          <div class="hint">Схема показывает настройки готового алгоритма. Правила входа и выхода реализованы в Python SDK.</div>
+        </div>
+        <div id="source-panel" class="inspector-content" role="tabpanel" aria-labelledby="source-tab" hidden>
+          <h2>Python-стратегия</h2>
+          <p class="muted">Файл для загрузчика SDK и внешнего каталога Workbench.</p>
+          <pre id="source" aria-label="Сгенерированный Python"></pre>
+          <p class="field-help">Для дальнейшего редактирования сохраните JSON. Python использует установленный SDK.</p>
+        </div>
+      </aside>
+    </main>
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
